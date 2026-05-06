@@ -3,7 +3,7 @@
   Look — Demo (Math)
 
   Responsive embed (scales on mobile — use this in Framer):
-  <div style="width:100%;max-width:640px;aspect-ratio:640/770;margin:0 auto">
+  <div style="width:100%;max-width:640px;aspect-ratio:640/923;margin:0 auto">
     <iframe
       src="https://trylookai.github.io/ideal-waddle"
       style="width:100%;height:100%;border:none;overflow:hidden;background:transparent"
@@ -11,10 +11,10 @@
     ></iframe>
   </div>
 
-  Fixed embed (640×770):
+  Fixed embed (640×923):
   <iframe
     src="https://trylookai.github.io/ideal-waddle"
-    width="640" height="770"
+    width="640" height="923"
     style="border:none;overflow:hidden;background:transparent"
     allowtransparency="true"
   ></iframe>
@@ -29,18 +29,18 @@
     *{margin:0;padding:0;box-sizing:border-box}
     html,body{width:100%;height:100%;background:transparent!important;overflow:hidden;position:relative;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",system-ui,sans-serif}
 
-    .stage{position:absolute;bottom:0;left:50%;transform:translateX(-50%);width:640px;height:770px}
+    .stage{position:absolute;bottom:0;left:50%;transform:translateX(-50%);width:640px;height:923px}
 
     /* Floating math panel */
     .bg-float{
       position:absolute;top:0;left:50%;
-      transform:translateX(-50%) translateY(190px);
+      transform:translateX(-50%) translateY(343px);
       opacity:0;transition:transform .48s cubic-bezier(.16,1,.3,1),opacity .32s ease;
       width:min(576px,94vw);pointer-events:none;z-index:1;
     }
     .bg-float.visible{transform:translateX(-50%) translateY(0);opacity:1;pointer-events:auto}
-    .float-card{background:rgba(18,18,28,.97);border:1px solid rgba(255,255,255,.11);border-radius:28px;aspect-ratio:576/193;overflow:hidden}
-    .float-card img{width:100%;height:100%;display:block;object-fit:fill}
+    .float-card{background:rgba(18,18,28,.97);border:1px solid rgba(255,255,255,.11);border-radius:28px;aspect-ratio:816/487;overflow:hidden}
+    .float-card img{width:100%;height:100%;display:block;object-fit:cover}
 
     /* App window */
     #app{
@@ -61,7 +61,7 @@
     #status-dot{width:6px;height:6px;border-radius:50%;background:rgba(180,180,180,.7);animation:pulse 1.5s ease-in-out infinite;display:none}
     #status-dot.on{display:block}
     @keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(.8)}}
-    .icon-btn{border:1px solid rgba(255,255,255,.18);background:linear-gradient(160deg,rgb(90,90,112) 0%,rgb(62,62,82) 100%);box-shadow:inset 0 1px 0 rgba(255,255,255,.22),0 1px 4px rgba(0,0,0,.45);padding:3px 7px;border-radius:7px;cursor:pointer;color:rgba(255,255,255,.85);font-size:14px;line-height:1;transition:background .15s,color .15s,border-color .15s,box-shadow .15s;user-select:none}
+    .icon-btn{border:1px solid rgba(255,255,255,.18);background:linear-gradient(160deg,rgb(90,90,112) 0%,rgb(62,62,82) 100%);box-shadow:inset 0 1px 0 rgba(255,255,255,.22),0 1px 4px rgba(0,0,0,.45);padding:3px 7px;border-radius:7px;cursor:pointer;color:rgba(255,255,255,.85);font-size:14px;line-height:1;display:inline-flex;align-items:center;transition:background .15s,color .15s,border-color .15s,box-shadow .15s;user-select:none}
     .icon-btn:hover{background:linear-gradient(160deg,rgb(108,108,134) 0%,rgb(78,78,100) 100%);border-color:rgba(255,255,255,.28);box-shadow:inset 0 1px 0 rgba(255,255,255,.32),0 1px 6px rgba(0,0,0,.5);color:#fff}
     .icon-btn:disabled{opacity:.3;cursor:default;box-shadow:none}
 
@@ -77,8 +77,10 @@
     #messages::-webkit-scrollbar-thumb{background:rgba(255,255,255,.15);border-radius:3px}
     .msg{margin-bottom:14px;animation:msgIn .15s ease both}
     @keyframes msgIn{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
-    .msg.user{display:flex;justify-content:flex-end}
-    .msg.user .bubble{max-width:78%;background:linear-gradient(160deg,rgb(65,130,255) 0%,rgb(42,96,224) 100%);border:1px solid rgba(140,185,255,.45);box-shadow:inset 0 1px 0 rgba(200,225,255,.3),0 1px 6px rgba(50,100,240,.4);border-radius:16px 16px 4px 16px;padding:8px 13px;font-size:13.5px;line-height:1.5;color:#fff;word-break:break-word}
+    .msg.user{display:flex;justify-content:flex-end;align-items:center}
+    .retry-btn{border:1px solid rgba(255,255,255,.18);background:linear-gradient(160deg,rgb(90,90,112) 0%,rgb(62,62,82) 100%);box-shadow:inset 0 1px 0 rgba(255,255,255,.22),0 1px 4px rgba(0,0,0,.45);padding:3px 7px;border-radius:7px;cursor:pointer;color:rgba(255,255,255,.85);font-size:14px;line-height:1;display:inline-flex;align-items:center;flex-shrink:0;margin-right:6px;transition:background .15s,color .15s,border-color .15s,box-shadow .15s}
+    .retry-btn:hover{background:linear-gradient(160deg,rgb(108,108,134) 0%,rgb(78,78,100) 100%);border-color:rgba(255,255,255,.28);box-shadow:inset 0 1px 0 rgba(255,255,255,.32),0 1px 6px rgba(0,0,0,.5);color:#fff}
+    .msg.user .bubble{max-width:78%;background:linear-gradient(160deg,rgb(65,130,255) 0%,rgb(42,96,224) 100%);border:1px solid rgba(140,185,255,.45);box-shadow:inset 0 1px 0 rgba(200,225,255,.3),0 1px 6px rgba(50,100,240,.4);border-radius:20px 20px 4px 20px;padding:8px 13px;font-size:13.5px;line-height:1.5;color:#fff;word-break:break-word}
     .msg.assistant .bubble{color:rgba(230,230,245,.92);font-size:14px;line-height:1.65;word-break:break-word}
     .typing-dots{display:flex;gap:4px;align-items:center;padding:6px 2px}
     .typing-dots span{width:5px;height:5px;background:rgba(255,255,255,.4);border-radius:50%;animation:dot-bounce 1.2s ease-in-out infinite}
@@ -123,8 +125,8 @@
     @media(max-width:639px){
       html,body{border-radius:0 0 24px 24px}
       .stage{left:0;transform:none;width:100%;height:100%}
-      .bg-float{transform:translateX(-50%) translateY(min(190px,calc(94vw * 193 / 576)))}
-      #app{width:100%;height:calc(100% - min(190px,calc(94vw * 193 / 576)));border-radius:24px}
+      .bg-float{transform:translateX(-50%) translateY(min(343px,calc(94vw * 487 / 816)))}
+      #app{width:100%;height:calc(100% - min(343px,calc(94vw * 487 / 816)));border-radius:24px}
       #header{padding:14px 18px 13px}
       .logo-text{font-size:13px;letter-spacing:2px}
       .icon-btn{font-size:16px;padding:4px 9px}
@@ -132,9 +134,9 @@
       .msg.user .bubble{font-size:15.5px;line-height:1.55;padding:9px 14px}
       .msg.assistant .bubble{font-size:15.5px;line-height:1.7}
       .bubble h1{font-size:20px}.bubble h2{font-size:18px}.bubble h3{font-size:16px}
-      #input-bar{padding:12px 14px}
-      #chat-input{font-size:16px}
-      #send-btn{width:38px;height:38px;font-size:19px}
+      #input-bar{padding:10px 12px}
+      #chat-input{font-size:16px;padding:12px 52px 12px 20px;min-height:48px;border-radius:24px}
+      #send-btn{width:38px;height:38px;font-size:19px;top:auto;bottom:5px;right:5px;transform:none}
       .typing-dots span{width:6px;height:6px}
     }
   </style>
@@ -196,67 +198,63 @@ const KATEX_CFG = {
 };
 
 const LATEX_SOURCE = String.raw`\begin{align}
-\partial_t u + (u \cdot \nabla)u &= \nu \Delta u - \nabla p \tag{1.1a} \\
-\nabla \cdot u &= 0, \quad u(0,\cdot) = u_0 \tag{1.1b}
+\partial_t u + (-\Delta)^\beta u + u \cdot \nabla u + \nabla p &= 0 \tag{1.1} \\
+\operatorname{div} u &= 0 \tag{1.2} \\
+u(\cdot,0) &= u_0(\cdot) \tag{1.3}
 \end{align}`;
 
 const CONTENT = {
-  first: String.raw`## Conjecture 1.1 — Navier-Stokes Global Regularity
+  first: String.raw`## Summary: 3D Hyper-dissipative Navier-Stokes System
 
-This is the **Clay Millennium Prize Problem** — one of seven unsolved problems with a $1,000,000 prize. The conjecture asks whether smooth fluid flows always stay smooth, or can they blow up to infinite velocity in finite time?
+The provided text defines the mathematical framework for the 3D hyper-dissipative (HD) Navier-Stokes (NS) system. This is a generalization of the classical Navier-Stokes equations where the standard Laplacian operator $\Delta$ (representing physical viscosity) is replaced by a higher-order operator $(-\Delta)^\beta$.
 
-**The equations (1.1) from your capture:**
+## Key Concepts
 
-$$\partial_t u + (u \cdot \nabla)u = \nu \Delta u - \nabla p$$
-
-$$\nabla \cdot u = 0, \quad u(0,\cdot) = u_0$$
-
-**Term by term:**
-
-- $\partial_t u$ — how velocity changes over time at a fixed point
-- $(u \cdot \nabla)u$ — convective term: fluid carrying its own momentum (the nonlinear term)
-- $\nu \Delta u$ — viscous diffusion ($\nu > 0$ is kinematic viscosity, $\nu = \mu/\rho$)
-- $-\nabla p$ — pressure gradient driving the flow
-- $\nabla \cdot u = 0$ — incompressibility: density stays constant
-- $u(0,\cdot) = u_0$ — initial velocity field, prescribed at $t = 0$
-
-**Why it's open:** The nonlinear term $(u \cdot \nabla)u$ can amplify disturbances. Nobody has proved smooth solutions always exist in 3D — or found a counterexample.`,
+- **Hyper-viscosity:** The term $(-\Delta)^\beta$ with $\beta > 1$ represents hyper-dissipation. This operator acts as a Fourier multiplier with the symbol $|\xi|^{2\beta}$, meaning it suppresses high-frequency modes more aggressively than the standard Laplacian ($\beta=1$).
+- **Incompressibility:** Equation (1.2) enforces the divergence-free condition, $\text{div } u = 0$, which is a standard constraint for incompressible fluid flow.
+- **Domain and Initial Conditions:** The system is defined on the entire 3D space $\mathbb{R}^3$ over a time interval $(0, T)$, with an initial velocity field $u_0$ specified at $t=0$.
+- **Physical Simplifications:** The system assumes a unit hyperviscosity coefficient and no external forcing, focusing purely on the internal dynamics of the hyper-dissipative fluid.`,
 
   pick: lower => {
-    if (lower.includes('turbul') || lower.includes('nonlinear') || lower.includes('reynolds')) return 0;
-    if (lower.includes('viscous') || lower.includes('viscosity') || lower.includes('friction')) return 1;
+    if (lower.includes('beta') || lower.includes('fourier') || lower.includes('frequen') || lower.includes('dissip') || lower.includes('hyper')) return 0;
+    if (lower.includes('div') || lower.includes('incompress') || lower.includes('pressure')) return 1;
     return 2;
   },
 
   replies: [
-    String.raw`The culprit is the **convective term** $(\mathbf{u} \cdot \nabla)\mathbf{u}$.
+    String.raw`The operator $(-\Delta)^\beta$ is defined via the **Fourier transform**:
 
-It means the velocity field *advects itself* — fast-moving fluid carries its momentum into surrounding regions, creating chaotic feedback. This nonlinearity is what produces turbulence.
+$$\widehat{(-\Delta)^\beta f}(\xi) = |\xi|^{2\beta} \hat{f}(\xi)$$
 
-The **Reynolds number** predicts when it takes over:
+For $\beta = 1$ this recovers the classical Laplacian. For $\beta > 1$, high-frequency components (large $|\xi|$) are penalised by $|\xi|^{2\beta}$ instead of $|\xi|^2$ — a much stronger damping.
 
-$$Re = \frac{\rho \, u \, L}{\mu}$$
+**Why use it?** Hyper-dissipation is a common regularisation device:
+- It makes global well-posedness easier to prove (Lions showed $\beta \geq 5/4$ suffices in 3D)
+- It appears in turbulence modelling and numerical schemes as a selective high-frequency filter
+- The limit $\beta \to 1$ recovers the classical open problem`,
 
-- $Re \lesssim 2300$ → smooth **laminar** flow
-- $Re \gtrsim 4000$ → chaotic **turbulent** flow
+    String.raw`The constraint $\operatorname{div} u = 0$ encodes **incompressibility** — fluid density is constant and as much flow enters any region as leaves it.
 
-Whether smooth 3D solutions always exist is a **Millennium Prize Problem** — unsolved since 2000, worth **$1,000,000**.`,
+The pressure $p$ has no independent evolution equation. Instead, it acts as a **Lagrange multiplier** that instantaneously adjusts to enforce the divergence-free condition at every moment.
 
-    String.raw`The viscous term $\mu \nabla^2 \mathbf{u}$ is a diffusion operator on the velocity field.
+Taking the divergence of (1.1) and using $\operatorname{div} u = 0$:
 
-The Laplacian $\nabla^2 \mathbf{u}$ measures how much velocity at a point *differs from its neighbors* — a smoothing force that resists sharp velocity gradients.
+$$-\Delta p = \operatorname{div}(u \cdot \nabla u)$$
 
-**Intuition:** stir honey vs. water:
-- Honey: high $\mu$ → momentum diffuses rapidly → smooth laminar flow
-- Water: low $\mu$ → layers slide freely → turbulence at modest speeds
+So $p$ is determined elliptically by the velocity field at each time — a non-local coupling that is one source of difficulty in the analysis.`,
 
-At high Reynolds number $Re = \rho u L / \mu$, viscosity matters only in thin **boundary layers** near walls, not in the bulk flow.`,
+    String.raw`Compared to the **classical Navier-Stokes** ($\beta = 1$):
 
-    String.raw`The continuity equation $\nabla \cdot \mathbf{u} = 0$ enforces **incompressibility** — divergence of velocity is zero everywhere.
+$$\partial_t u - \nu\Delta u + u \cdot \nabla u + \nabla p = 0$$
 
-Physically: as much fluid flows *into* any volume as flows *out*. Density stays constant.
+the HD system replaces $-\nu\Delta u$ with $(-\Delta)^\beta u$ (unit coefficient, $\beta > 1$).
 
-This means pressure $p$ has no independent evolution equation — it acts as a Lagrange multiplier enforcing divergence-free flow. Solvers like **SIMPLE** or **projection methods** iteratively correct $p$ to satisfy $\nabla \cdot \mathbf{u} = 0$ at each time step.`,
+**Why this matters for regularity:**
+- Classical 3D NS: global regularity is an **open Millennium Prize Problem**
+- HD NS with $\beta \geq 5/4$: global smooth solutions are **known to exist** (Lions 1969)
+- The gap $1 < \beta < 5/4$ remains partially open and is an active research area
+
+The hyper-dissipative system is thus a tractable proxy for understanding what makes the classical problem hard.`,
   ],
 
   restart: `**Great exploration!** Press **↺** to restart the demo.`,
@@ -272,11 +270,12 @@ function busy(on) {
   inputBar.style.pointerEvents = on ? 'none' : '';
 }
 
-function newAssistantBubble() {
+function newAssistantBubble(after) {
   const msg = document.createElement('div');
   msg.className = 'msg assistant';
   msg.innerHTML = '<div class="bubble"><div class="typing-dots"><span></span><span></span><span></span></div></div>';
-  messages.appendChild(msg);
+  if (after && after.nextSibling) messages.insertBefore(msg, after.nextSibling);
+  else messages.appendChild(msg);
   messages.scrollTop = messages.scrollHeight;
   return msg.firstElementChild;
 }
@@ -287,6 +286,7 @@ function addUserBubble(text) {
   msg.innerHTML = `<div class="bubble">${text.replace(/&/g,'&amp;').replace(/</g,'&lt;')}</div>`;
   messages.appendChild(msg);
   messages.scrollTop = messages.scrollHeight;
+  return msg;
 }
 
 function md(raw) {
@@ -312,10 +312,37 @@ function md(raw) {
     c = c.trim();
     return !c || /^<[h1-6ulodpbh]|^\x00[BIM]/.test(c) ? c : `<p>${c.replace(/\n/g,'<br>')}</p>`;
   }).join('\n');
+  const attrEsc = v => v.replace(/&/g,'&amp;').replace(/"/g,'&quot;');
   s = s.replace(/\x00I(\d+)\x00/g,(_,i)=>I[+i])
        .replace(/\x00B(\d+)\x00/g,(_,i)=>B[+i])
-       .replace(/\x00M(\d+)\x00/g,(_,i)=>M[+i]);
+       .replace(/\x00M(\d+)\x00/g,(_,i)=>`<span class="math-src" data-latex="${attrEsc(M[+i])}">${M[+i]}</span>`);
   return s;
+}
+
+function selectionToLatexText(sel) {
+  const range = sel.getRangeAt(0);
+  const ancestor = range.commonAncestorContainer;
+  const mathSrc = (ancestor.nodeType === Node.ELEMENT_NODE ? ancestor : ancestor.parentElement)?.closest('.math-src');
+  if (mathSrc) return mathSrc.dataset.latex ?? '';
+  const root = ancestor.nodeType === Node.ELEMENT_NODE ? ancestor : ancestor.parentElement;
+  const parts = [];
+  (function walk(node) {
+    if (!range.intersectsNode(node)) return;
+    if (node.nodeType === Node.ELEMENT_NODE) {
+      if (node.classList.contains('math-src')) { parts.push(node.dataset.latex ?? ''); return; }
+      if (node.classList.contains('katex-mathml')) return;
+    }
+    if (node.nodeType === Node.TEXT_NODE) {
+      const t = node.textContent ?? '';
+      if (node === range.startContainer && node === range.endContainer) parts.push(t.slice(range.startOffset, range.endOffset));
+      else if (node === range.startContainer) parts.push(t.slice(range.startOffset));
+      else if (node === range.endContainer) parts.push(t.slice(0, range.endOffset));
+      else parts.push(t);
+      return;
+    }
+    for (const child of node.childNodes) walk(child);
+  })(root);
+  return parts.join('');
 }
 
 function stream(myToken, bubble, text, onDone) {
@@ -363,16 +390,11 @@ function runDemo() {
   });
 }
 
-function send() {
-  const text = chatInput.value.trim();
-  if (!text) return;
-  chatInput.value = '';
-  chatInput.style.height = '';
-  addUserBubble(text);
+function doSend(text, umsg) {
   busy(true);
   turns++;
   const myToken = token;
-  const bubble = newAssistantBubble();
+  const bubble = newAssistantBubble(umsg);
   const reply = turns >= 3 ? CONTENT.restart : CONTENT.replies[CONTENT.pick(text.toLowerCase())];
   setTimeout(() => {
     stream(myToken, bubble, reply, () => {
@@ -380,6 +402,26 @@ function send() {
       busy(false);
     });
   }, 80);
+}
+
+function send() {
+  const text = chatInput.value.trim();
+  if (!text) return;
+  chatInput.value = '';
+  chatInput.style.height = '';
+  const umsg = addUserBubble(text);
+  const retryBtn = document.createElement('button');
+  retryBtn.className = 'retry-btn';
+  retryBtn.textContent = '↺';
+  retryBtn.title = 'Retry';
+  retryBtn.onclick = () => {
+    const next = umsg.nextElementSibling;
+    if (next && next.classList.contains('assistant')) next.remove();
+    turns--;
+    doSend(text, umsg);
+  };
+  umsg.insertBefore(retryBtn, umsg.firstChild);
+  doSend(text, umsg);
 }
 
 function restart() {
@@ -398,6 +440,12 @@ chatInput.addEventListener('keydown', e => {
   if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); send(); }
 });
 sendBtn.onclick = send;
+messages.addEventListener('copy', e => {
+  const sel = window.getSelection();
+  if (!sel || sel.isCollapsed || !e.clipboardData) return;
+  e.preventDefault();
+  e.clipboardData.setData('text/plain', selectionToLatexText(sel));
+});
 
 runDemo();
 </script>
