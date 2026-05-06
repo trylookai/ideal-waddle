@@ -1,7 +1,6 @@
 <!doctype html>
 <!--
-  Look — Combined Demo (Code + Math)
-  Math mode requires internet for KaTeX.
+  Look — Demo (Math)
 
   Responsive embed (scales on mobile — use this in Framer):
   <div style="width:100%;max-width:640px;aspect-ratio:640/770;margin:0 auto">
@@ -12,7 +11,7 @@
     ></iframe>
   </div>
 
-  Fixed embed (640×770, for contexts that handle scaling themselves):
+  Fixed embed (640×770):
   <iframe
     src="https://trylookai.github.io/ideal-waddle"
     width="640" height="770"
@@ -28,160 +27,66 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css" crossorigin="anonymous">
   <style>
     *{margin:0;padding:0;box-sizing:border-box}
+    html,body{width:100%;height:100%;background:transparent!important;overflow:hidden;position:relative;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",system-ui,sans-serif}
 
-    html,body{
-      width:100%;height:100%;
-      background-color: transparent !important;
-      background: transparent !important;
-      overflow:hidden;
-      position:relative;
-      font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",system-ui,sans-serif;
-    }
+    .stage{position:absolute;bottom:0;left:50%;transform:translateX(-50%);width:640px;height:770px}
 
-    /* ── Stage: shared anchor so panels & app stay locked together ── */
-    .stage{
-      position:absolute;
-      bottom:0;left:50%;
-      transform:translateX(-50%);
-      width:640px;height:770px;
-    }
-
-    /* ── Floating panels (peek out from behind the top of the app) ── */
+    /* Floating math panel */
     .bg-float{
-      position:absolute;
-      top:0;
-      left:50%;
-      /* hidden: parked fully behind the app window */
+      position:absolute;top:0;left:50%;
       transform:translateX(-50%) translateY(190px);
-      opacity:0;
-      transition:transform .48s cubic-bezier(.16,1,.3,1), opacity .32s ease;
-      width:min(576px, 94vw);
-      pointer-events:none;
-      z-index:1; /* behind #app */
+      opacity:0;transition:transform .48s cubic-bezier(.16,1,.3,1),opacity .32s ease;
+      width:min(576px,94vw);pointer-events:none;z-index:1;
     }
-    .bg-float.visible{
-      /* slides up; almost all of the card peeks above the app window */
-      transform:translateX(-50%) translateY(0);
-      opacity:1;
-      pointer-events:auto;
-    }
+    .bg-float.visible{transform:translateX(-50%) translateY(0);opacity:1;pointer-events:auto}
+    .float-card{background:rgba(18,18,28,.97);border:1px solid rgba(255,255,255,.11);border-radius:28px;aspect-ratio:576/193;overflow:hidden}
+    .float-card img{width:100%;height:100%;display:block;object-fit:fill}
 
-    /* Both cards: same outer size, same border-radius as app window */
-    .float-card{
-      background:rgba(18,18,28,.97);
-      border:1px solid rgba(255,255,255,.11);
-      border-radius:28px;
-      box-shadow:none;
-      aspect-ratio:576/193;
-      overflow:hidden;
-    }
-
-    /* Code card: padded text */
-    #bg-code .float-card{ padding:14px 20px; }
-
-    /* Math card: image fills edge-to-edge */
-    #bg-math .float-card{ padding:0; }
-    #bg-math .float-card img{ width:100%; height:100%; display:block; object-fit:fill; }
-
-    /* Code float text */
-    .float-code{
-      font-family:"JetBrains Mono","Fira Code","SF Mono",Menlo,Consolas,monospace;
-      font-size:11.5px;line-height:1.65;
-      white-space:pre;
-      color:rgba(200,240,200,.75);
-    }
-    .float-code .err{color:rgba(255,110,110,.65)}
-
-    /* ── App window — pinned to bottom of stage ── */
+    /* App window */
     #app{
-      position:absolute;
-      bottom:0;left:0;
-      width:640px;height:580px;
+      position:absolute;bottom:0;left:0;width:640px;height:580px;
       display:flex;flex-direction:column;
-      background:rgba(28,28,28,.92);
+      background:rgba(28,28,28,.95);
       backdrop-filter:blur(28px) saturate(180%) brightness(.9);
       -webkit-backdrop-filter:blur(28px) saturate(180%) brightness(.9);
-      border:1px solid rgba(255,255,255,.09);
-      border-radius:28px;
-      overflow:hidden;
-      animation:slideUp .32s cubic-bezier(.16,1,.3,1) both;
-      z-index:5; /* sits in front of the floating panels */
+      border:1px solid rgba(255,255,255,.09);border-radius:28px;overflow:hidden;
+      animation:slideUp .32s cubic-bezier(.16,1,.3,1) both;z-index:5;
     }
     @keyframes slideUp{from{opacity:0;transform:translateY(16px) scale(.98)}to{opacity:1;transform:none}}
 
-    /* ── Header ── */
-    #header{
-      display:flex;align-items:center;justify-content:space-between;
-      padding:12px 16px 11px;
-      border-bottom:1px solid rgba(255,255,255,.07);
-      flex-shrink:0;cursor:default;user-select:none;
-    }
-    .logo-text{font-size:11px;font-weight:700;color:rgba(255,255,255,.9);letter-spacing:1.8px;min-width:52px}
+    /* Header */
+    #header{display:flex;align-items:center;justify-content:space-between;padding:12px 16px 11px;border-bottom:1px solid rgba(255,255,255,.07);flex-shrink:0;cursor:default;user-select:none}
+    .logo-text{font-size:11px;font-weight:700;color:rgba(255,255,255,.9);letter-spacing:1.8px}
     .header-actions{display:flex;gap:6px;align-items:center}
     #status-dot{width:6px;height:6px;border-radius:50%;background:rgba(180,180,180,.7);animation:pulse 1.5s ease-in-out infinite;display:none}
     #status-dot.on{display:block}
     @keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(.8)}}
-    .icon-btn{border:none;background:none;padding:0 2px;cursor:pointer;color:rgba(255,255,255,.35);font-size:15px;line-height:1;transition:color .12s;user-select:none}
-    .icon-btn:hover{color:rgba(255,255,255,.85)}
+    .icon-btn{border:1px solid rgba(255,255,255,.18);background:linear-gradient(160deg,rgb(90,90,112) 0%,rgb(62,62,82) 100%);box-shadow:inset 0 1px 0 rgba(255,255,255,.22),0 1px 4px rgba(0,0,0,.45);padding:3px 7px;border-radius:7px;cursor:pointer;color:rgba(255,255,255,.85);font-size:14px;line-height:1;transition:background .15s,color .15s,border-color .15s,box-shadow .15s;user-select:none}
+    .icon-btn:hover{background:linear-gradient(160deg,rgb(108,108,134) 0%,rgb(78,78,100) 100%);border-color:rgba(255,255,255,.28);box-shadow:inset 0 1px 0 rgba(255,255,255,.32),0 1px 6px rgba(0,0,0,.5);color:#fff}
+    .icon-btn:disabled{opacity:.3;cursor:default;box-shadow:none}
 
-    /* ── Mode toggle pill ── */
-    .mode-toggle{
-      display:flex;
-      background:rgba(255,255,255,.05);
-      border:1px solid rgba(255,255,255,.09);
-      border-radius:20px;
-      padding:3px;gap:2px;
-    }
-    .mode-btn{
-      border:1px solid transparent;background:none;
-      padding:4px 13px;border-radius:16px;
-      font-size:10px;font-weight:700;letter-spacing:1px;
-      color:rgba(255,255,255,.28);
-      cursor:pointer;user-select:none;
-      transition:background .15s,color .15s,border-color .15s;
-      line-height:1;
-    }
-    .mode-btn:hover:not(.active){color:rgba(255,255,255,.55)}
-    .mode-btn.active{
-      background:rgba(100,160,255,.18);
-      color:rgba(200,225,255,.95);
-      border-color:rgba(100,160,255,.28);
-    }
-
-    /* ── Body ── */
+    /* Body */
     #body{flex:1;overflow:hidden;display:flex;flex-direction:column;position:relative;min-height:0}
     #loading{display:flex;align-items:center;justify-content:center;flex:1}
     .spinner{width:32px;height:32px;border:2.5px solid rgba(255,255,255,.1);border-top-color:rgba(255,255,255,.6);border-radius:50%;animation:spin .7s linear infinite}
     @keyframes spin{to{transform:rotate(360deg)}}
 
-    /* ── Messages ── */
-    #messages{
-      display:none;flex:1;overflow-y:auto;
-      padding:14px 16px 10px;
-      scrollbar-width:thin;scrollbar-color:rgba(255,255,255,.15) transparent;
-      min-height:0;
-    }
+    /* Messages */
+    #messages{display:none;flex:1;overflow-y:auto;padding:14px 16px 10px;scrollbar-width:thin;scrollbar-color:rgba(255,255,255,.15) transparent;min-height:0}
     #messages::-webkit-scrollbar{width:5px}
     #messages::-webkit-scrollbar-thumb{background:rgba(255,255,255,.15);border-radius:3px}
-
     .msg{margin-bottom:14px;animation:msgIn .15s ease both}
     @keyframes msgIn{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
     .msg.user{display:flex;justify-content:flex-end}
-    .msg.user .bubble{
-      max-width:78%;
-      background:rgba(100,160,255,.18);border:1px solid rgba(100,160,255,.25);
-      border-radius:16px 16px 4px 16px;padding:8px 13px;
-      font-size:13.5px;line-height:1.5;color:rgba(220,230,255,.95);word-break:break-word;
-    }
+    .msg.user .bubble{max-width:78%;background:rgba(100,160,255,.18);border:1px solid rgba(100,160,255,.25);border-radius:16px 16px 4px 16px;padding:8px 13px;font-size:13.5px;line-height:1.5;color:rgba(220,230,255,.95);word-break:break-word}
     .msg.assistant .bubble{color:rgba(230,230,245,.92);font-size:14px;line-height:1.65;word-break:break-word}
-
     .typing-dots{display:flex;gap:4px;align-items:center;padding:6px 2px}
     .typing-dots span{width:5px;height:5px;background:rgba(255,255,255,.4);border-radius:50%;animation:dot-bounce 1.2s ease-in-out infinite}
     .typing-dots span:nth-child(2){animation-delay:.2s}
     .typing-dots span:nth-child(3){animation-delay:.4s}
     @keyframes dot-bounce{0%,80%,100%{transform:translateY(0);opacity:.4}40%{transform:translateY(-5px);opacity:1}}
 
-    /* ── Bubble content ── */
+    /* Bubble content */
     .bubble h1,.bubble h2,.bubble h3,.bubble h4{color:rgba(255,255,255,.95);font-weight:600;margin:18px 0 8px;line-height:1.3}
     .bubble h1{font-size:18px;margin-top:0}
     .bubble h2{font-size:16px;margin-top:14px}
@@ -193,75 +98,43 @@
     .bubble li{margin:4px 0}
     .bubble strong{color:rgba(255,255,255,.95);font-weight:600}
     .bubble em{color:rgba(200,200,255,.85)}
-    .bubble code{
-      font-family:"JetBrains Mono","Fira Code","SF Mono",Menlo,Consolas,monospace;
-      font-size:12.5px;background:rgba(255,255,255,.08);color:rgba(160,220,255,.95);
-      padding:2px 5px;border-radius:4px;border:1px solid rgba(255,255,255,.07);
-    }
-    .bubble pre{
-      background:rgba(0,0,0,.4);border:1px solid rgba(255,255,255,.08);
-      border-radius:8px;padding:14px 16px;overflow-x:auto;margin:10px 0;
-      scrollbar-width:thin;scrollbar-color:rgba(255,255,255,.1) transparent;
-    }
+    .bubble code{font-family:"JetBrains Mono","Fira Code","SF Mono",Menlo,Consolas,monospace;font-size:12.5px;background:rgba(255,255,255,.08);color:rgba(160,220,255,.95);padding:2px 5px;border-radius:4px;border:1px solid rgba(255,255,255,.07)}
+    .bubble pre{background:rgba(0,0,0,.4);border:1px solid rgba(255,255,255,.08);border-radius:8px;padding:14px 16px;overflow-x:auto;margin:10px 0;scrollbar-width:thin;scrollbar-color:rgba(255,255,255,.1) transparent}
     .bubble pre code{background:none;border:none;padding:0;color:rgba(200,240,200,.9);line-height:1.55;white-space:pre}
     .bubble blockquote{border-left:3px solid rgba(255,255,255,.25);margin:10px 0;padding:6px 14px;background:rgba(255,255,255,.04);border-radius:0 6px 6px 0;color:rgba(200,200,230,.85)}
     .bubble hr{border:none;border-top:1px solid rgba(255,255,255,.08);margin:14px 0}
     .bubble a{color:#7c9ef7;text-decoration:underline;text-underline-offset:2px}
-
-    /* ── KaTeX overrides ── */
     .katex{color:rgba(230,230,230,.95);font-size:1em}
     .katex-display{margin:12px 0;overflow-x:auto}
     .katex-display>.katex{color:rgba(235,235,235,.97)}
 
-    /* ── Input bar ── */
-    #input-bar{display:none;padding:10px 12px;border-top:1px solid rgba(255,255,255,.07);gap:8px;align-items:flex-end;flex-shrink:0}
-    #input-bar.on{display:flex}
-    #chat-input{
-      flex:1;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);
-      border-radius:20px;padding:8px 14px;color:rgba(230,230,245,.92);
-      font-family:inherit;font-size:13.5px;line-height:1.45;
-      resize:none;outline:none;min-height:36px;max-height:120px;overflow-y:auto;
-      transition:border-color .15s;scrollbar-width:thin;
-    }
+    /* Input bar */
+    #input-bar{display:none;padding:10px 12px;border-top:1px solid rgba(255,255,255,.07);flex-shrink:0}
+    #input-bar.on{display:block}
+    #input-wrap{position:relative}
+    #chat-input{width:100%;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:20px;padding:10px 52px 10px 14px;color:rgba(230,230,245,.92);font-family:inherit;font-size:13.5px;line-height:1.45;resize:none;outline:none;min-height:40px;max-height:120px;overflow-y:auto;transition:border-color .15s;scrollbar-width:thin;display:block}
     #chat-input:focus{border-color:rgba(100,160,255,.4)}
     #chat-input::placeholder{color:rgba(255,255,255,.25)}
-    #send-btn{
-      width:32px;height:32px;border-radius:50%;border:none;
-      background:rgba(100,160,255,.25);color:rgba(180,210,255,.9);
-      font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;
-      flex-shrink:0;transition:background .12s,color .12s;line-height:1;
-    }
-    #send-btn:hover:not(:disabled){background:rgba(100,160,255,.4);color:rgba(220,235,255,.95)}
-    #send-btn:disabled{opacity:.35;cursor:default}
+    #send-btn{position:absolute;right:5px;top:50%;transform:translateY(-50%);width:34px;height:34px;border-radius:50%;border:1px solid rgba(140,185,255,.45);background:linear-gradient(160deg,rgb(65,130,255) 0%,rgb(42,96,224) 100%);box-shadow:inset 0 1px 0 rgba(200,225,255,.3),0 2px 10px rgba(50,100,240,.5);color:#fff;font-size:17px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .15s,border-color .15s,box-shadow .15s;line-height:1}
+    #send-btn:hover:not(:disabled){background:linear-gradient(160deg,rgb(85,148,255) 0%,rgb(58,112,240) 100%);border-color:rgba(160,200,255,.55);box-shadow:inset 0 1px 0 rgba(220,235,255,.38),0 2px 14px rgba(60,110,255,.6)}
+    #send-btn:disabled{opacity:.3;cursor:default;box-shadow:none}
 
-    /* ── Mobile: stage fills viewport; panel offset scales with card width ── */
+    /* Mobile */
     @media(max-width:639px){
       html,body{border-radius:0 0 24px 24px}
       .stage{left:0;transform:none;width:100%;height:100%}
-      /* card height at narrow width = (94vw) × (193/576) ≈ 94vw × 0.335       */
-      /* cap at 190px so desktop edge case is unchanged                          */
-      .bg-float{transform:translateX(-50%) translateY(min(190px, calc(94vw * 193 / 576)))}
-      #app{width:100%;height:calc(100% - min(190px, calc(94vw * 193 / 576)));border-radius:24px}
-    }
-
-    /* ── Mobile: larger text and touch targets ── */
-    @media(max-width:639px){
+      .bg-float{transform:translateX(-50%) translateY(min(190px,calc(94vw * 193 / 576)))}
+      #app{width:100%;height:calc(100% - min(190px,calc(94vw * 193 / 576)));border-radius:24px}
       #header{padding:14px 18px 13px}
       .logo-text{font-size:13px;letter-spacing:2px}
-      .mode-btn{font-size:11px;padding:5px 15px}
-      .icon-btn{font-size:19px;padding:0 5px}
+      .icon-btn{font-size:16px;padding:4px 9px}
       #messages{padding:16px 16px 12px}
       .msg.user .bubble{font-size:15.5px;line-height:1.55;padding:9px 14px}
       .msg.assistant .bubble{font-size:15.5px;line-height:1.7}
-      .bubble h1{font-size:20px}
-      .bubble h2{font-size:18px}
-      .bubble h3{font-size:16px}
-      .bubble h4{font-size:14.5px}
-      .bubble code{font-size:13.5px}
-      .bubble pre{padding:14px 16px}
-      #input-bar{padding:12px 14px;gap:10px}
-      #chat-input{font-size:16px;padding:9px 16px;border-radius:22px}
-      #send-btn{width:38px;height:38px;font-size:18px}
+      .bubble h1{font-size:20px}.bubble h2{font-size:18px}.bubble h3{font-size:16px}
+      #input-bar{padding:12px 14px}
+      #chat-input{font-size:16px}
+      #send-btn{width:38px;height:38px;font-size:19px}
       .typing-dots span{width:6px;height:6px}
     }
   </style>
@@ -269,37 +142,18 @@
 <body>
 <div class="stage">
 
-  <!-- Floating code panel — slides up behind the app in CODE mode -->
-  <div id="bg-code" class="bg-float">
+  <div id="bg-math" class="bg-float visible">
     <div class="float-card">
-      <div class="float-code">items = [10, 20, 30]
-result = items[3]
-
-<span class="err"># Traceback (most recent call last):
-#   File "app.py", line 2, in &lt;module&gt;
-#     result = items[3]
-#              ~~~~~~~
-# IndexError: list index out of range</span></div>
+      <img src="1.png" alt="Navier-Stokes equations">
     </div>
   </div>
 
-  <!-- Floating math panel — image of the captured textbook page -->
-  <div id="bg-math" class="bg-float">
-    <div class="float-card">
-      <img src="1.png" alt="Navier-Stokes Conjecture 1.1">
-    </div>
-  </div>
-
-  <!-- The Look app window -->
   <div id="app">
     <div id="header">
       <span class="logo-text" id="logo">LOOK</span>
-      <div class="mode-toggle">
-        <button class="mode-btn active" id="btn-math" onclick="setMode('math')">MATH</button>
-        <button class="mode-btn"        id="btn-code" onclick="setMode('code')">CODE</button>
-      </div>
       <div class="header-actions">
         <div id="status-dot"></div>
+        <button class="icon-btn" id="copy-latex-btn" title="Copy LaTeX" style="display:none" onclick="copyLatex()">∑</button>
         <button class="icon-btn" onclick="restart()">↺</button>
         <button class="icon-btn" style="cursor:not-allowed" title="(demo only)">✕</button>
       </div>
@@ -309,27 +163,27 @@ result = items[3]
       <div id="messages"></div>
     </div>
     <div id="input-bar">
-      <textarea id="chat-input" rows="1" placeholder="Ask a follow-up…"></textarea>
-      <button id="send-btn">↑</button>
+      <div id="input-wrap">
+        <textarea id="chat-input" rows="1" placeholder="Ask a follow-up…"></textarea>
+        <button id="send-btn">↑</button>
+      </div>
     </div>
   </div>
 
-</div><!-- /.stage -->
+</div>
 
 <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js" crossorigin="anonymous"></script>
 <script>
-const logo      = document.getElementById('logo');
-const dot       = document.getElementById('status-dot');
-const loading   = document.getElementById('loading');
-const messages  = document.getElementById('messages');
-const inputBar  = document.getElementById('input-bar');
-const chatInput = document.getElementById('chat-input');
-const sendBtn   = document.getElementById('send-btn');
-const bgCode    = document.getElementById('bg-code');
-const bgMath    = document.getElementById('bg-math');
+const logo         = document.getElementById('logo');
+const dot          = document.getElementById('status-dot');
+const loading      = document.getElementById('loading');
+const messages     = document.getElementById('messages');
+const inputBar     = document.getElementById('input-bar');
+const chatInput    = document.getElementById('chat-input');
+const sendBtn      = document.getElementById('send-btn');
+const copyLatexBtn = document.getElementById('copy-latex-btn');
 
-// ── KaTeX config ─────────────────────────────────────────────────────────────
 const KATEX_CFG = {
   delimiters: [
     { left: "$$", right: "$$", display: true  },
@@ -341,78 +195,13 @@ const KATEX_CFG = {
   errorColor: "rgba(255,100,100,.9)",
 };
 
-// ── Content ──────────────────────────────────────────────────────────────────
+const LATEX_SOURCE = String.raw`\begin{align}
+\partial_t u + (u \cdot \nabla)u &= \nu \Delta u - \nabla p \tag{1.1a} \\
+\nabla \cdot u &= 0, \quad u(0,\cdot) = u_0 \tag{1.1b}
+\end{align}`;
+
 const CONTENT = {
-  code: {
-    first:
-`## IndexError: list index out of range
-
-You're trying to access an element at an index that doesn't exist in the list.
-
-**Root cause:** The list has 3 items (indices \`0\`–\`2\`), but the code accesses index \`3\`.
-
-**The fix:**
-
-\`\`\`python
-items = ["apple", "banana", "cherry"]
-
-# ❌ Bug
-print(items[3])   # IndexError!
-
-# ✅ Loop safely
-for item in items:
-    print(item)
-
-# ✅ Or guard with len()
-if len(items) > 3:
-    print(items[3])
-\`\`\`
-
-**Quick tips:**
-- Use \`items[-1]\` to get the last element safely
-- Use \`enumerate()\` when you need both index and value
-- Wrap risky access in \`try/except IndexError\` for uncertain inputs`,
-
-    pick: lower =>
-      (lower.includes('fix') || lower.includes('safe') || lower.includes('how')) ? 1 : 0,
-
-    replies: [
-`The cleanest Python way is \`enumerate()\` — gives you both index and value without manual tracking:
-
-\`\`\`python
-items = ["apple", "banana", "cherry"]
-
-for i, item in enumerate(items):
-    print(f"[{i}] {item}")
-
-# Output:
-# [0] apple
-# [1] banana
-# [2] cherry
-\`\`\`
-
-This avoids off-by-one errors entirely and reads clearly.`,
-
-`Here's a reusable helper for safe list access:
-
-\`\`\`python
-def safe_get(lst, index, default=None):
-    try:
-        return lst[index]
-    except IndexError:
-        return default
-
-items = ["apple", "banana", "cherry"]
-print(safe_get(items, 10, "not found"))  # → "not found"
-\`\`\`
-
-Returns a \`default\` instead of raising — useful when list size isn't guaranteed.`],
-
-    restart: `**That's the core of it!** Press **↺** to restart or switch to **MATH** to see how Look handles equations.`,
-  },
-
-  math: {
-    first: String.raw`## Conjecture 1.1 — Navier-Stokes Global Regularity
+  first: String.raw`## Conjecture 1.1 — Navier-Stokes Global Regularity
 
 This is the **Clay Millennium Prize Problem** — one of seven unsolved problems with a $1,000,000 prize. The conjecture asks whether smooth fluid flows always stay smooth, or can they blow up to infinite velocity in finite time?
 
@@ -431,18 +220,16 @@ $$\nabla \cdot u = 0, \quad u(0,\cdot) = u_0$$
 - $\nabla \cdot u = 0$ — incompressibility: density stays constant
 - $u(0,\cdot) = u_0$ — initial velocity field, prescribed at $t = 0$
 
-**The setup:** $u_0$ must lie in the **Schwartz class** — infinitely differentiable and rapidly decaying at infinity. The solution must also satisfy $u \in L_t^\infty L_x^2$ (finite kinetic energy for all finite $T$).
-
 **Why it's open:** The nonlinear term $(u \cdot \nabla)u$ can amplify disturbances. Nobody has proved smooth solutions always exist in 3D — or found a counterexample.`,
 
-    pick: lower => {
-      if (lower.includes('turbul') || lower.includes('nonlinear') || lower.includes('reynolds') || lower.includes('chaotic')) return 0;
-      if (lower.includes('viscous') || lower.includes('viscosity') || lower.includes('friction') || lower.includes('mu') || lower.includes('μ')) return 1;
-      return 2;
-    },
+  pick: lower => {
+    if (lower.includes('turbul') || lower.includes('nonlinear') || lower.includes('reynolds')) return 0;
+    if (lower.includes('viscous') || lower.includes('viscosity') || lower.includes('friction')) return 1;
+    return 2;
+  },
 
-    replies: [
-      String.raw`The culprit is the **convective term** $(\mathbf{u} \cdot \nabla)\mathbf{u}$.
+  replies: [
+    String.raw`The culprit is the **convective term** $(\mathbf{u} \cdot \nabla)\mathbf{u}$.
 
 It means the velocity field *advects itself* — fast-moving fluid carries its momentum into surrounding regions, creating chaotic feedback. This nonlinearity is what produces turbulence.
 
@@ -455,7 +242,7 @@ $$Re = \frac{\rho \, u \, L}{\mu}$$
 
 Whether smooth 3D solutions always exist is a **Millennium Prize Problem** — unsolved since 2000, worth **$1,000,000**.`,
 
-      String.raw`The viscous term $\mu \nabla^2 \mathbf{u}$ is a diffusion operator on the velocity field.
+    String.raw`The viscous term $\mu \nabla^2 \mathbf{u}$ is a diffusion operator on the velocity field.
 
 The Laplacian $\nabla^2 \mathbf{u}$ measures how much velocity at a point *differs from its neighbors* — a smoothing force that resists sharp velocity gradients.
 
@@ -465,29 +252,43 @@ The Laplacian $\nabla^2 \mathbf{u}$ measures how much velocity at a point *diffe
 
 At high Reynolds number $Re = \rho u L / \mu$, viscosity matters only in thin **boundary layers** near walls, not in the bulk flow.`,
 
-      String.raw`The continuity equation $\nabla \cdot \mathbf{u} = 0$ enforces **incompressibility** — divergence of velocity is zero everywhere.
+    String.raw`The continuity equation $\nabla \cdot \mathbf{u} = 0$ enforces **incompressibility** — divergence of velocity is zero everywhere.
 
 Physically: as much fluid flows *into* any volume as flows *out*. Density stays constant.
 
 This means pressure $p$ has no independent evolution equation — it acts as a Lagrange multiplier enforcing divergence-free flow. Solvers like **SIMPLE** or **projection methods** iteratively correct $p$ to satisfy $\nabla \cdot \mathbf{u} = 0$ at each time step.`,
-    ],
+  ],
 
-    restart: `**Great exploration!** Press **↺** to restart or switch to **CODE** to see how Look handles errors and bugs.`,
-  },
+  restart: `**Great exploration!** Press **↺** to restart the demo.`,
 };
 
-// ── State ────────────────────────────────────────────────────────────────────
-let mode  = 'math';
 let turns = 0;
 let token = 0;
 
-// ── Background panel toggle ──────────────────────────────────────────────────
-function updateBg() {
-  bgCode.classList.toggle('visible', mode === 'code');
-  bgMath.classList.toggle('visible', mode === 'math');
+function busy(on) {
+  logo.textContent = on ? 'LOOKING…' : 'LOOK';
+  dot.classList.toggle('on', on);
+  sendBtn.disabled = on;
+  inputBar.style.pointerEvents = on ? 'none' : '';
 }
 
-// ── Markdown renderer (mirrors overlay.ts) ──────────────────────────────────
+function newAssistantBubble() {
+  const msg = document.createElement('div');
+  msg.className = 'msg assistant';
+  msg.innerHTML = '<div class="bubble"><div class="typing-dots"><span></span><span></span><span></span></div></div>';
+  messages.appendChild(msg);
+  messages.scrollTop = messages.scrollHeight;
+  return msg.firstElementChild;
+}
+
+function addUserBubble(text) {
+  const msg = document.createElement('div');
+  msg.className = 'msg user';
+  msg.innerHTML = `<div class="bubble">${text.replace(/&/g,'&amp;').replace(/</g,'&lt;')}</div>`;
+  messages.appendChild(msg);
+  messages.scrollTop = messages.scrollHeight;
+}
+
 function md(raw) {
   const esc = s => s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
   let s = raw;
@@ -517,57 +318,21 @@ function md(raw) {
   return s;
 }
 
-function renderMath(el) {
-  if (window.renderMathInElement) try { renderMathInElement(el, KATEX_CFG); } catch(e){}
-}
-
-// ── UI helpers ───────────────────────────────────────────────────────────────
-function busy(on) {
-  logo.textContent = on ? 'LOOKING…' : 'LOOK';
-  dot.classList.toggle('on', on);
-  sendBtn.disabled = on;
-  inputBar.style.pointerEvents = on ? 'none' : '';
-}
-
-function showChat() {
-  loading.style.display = 'none';
-  messages.style.display = 'block';
-}
-
-function newAssistantBubble() {
-  const msg = document.createElement('div');
-  msg.className = 'msg assistant';
-  msg.innerHTML = '<div class="bubble"><div class="typing-dots"><span></span><span></span><span></span></div></div>';
-  messages.appendChild(msg);
-  messages.scrollTop = messages.scrollHeight;
-  return msg.firstElementChild;
-}
-
-function addUserBubble(text) {
-  const msg = document.createElement('div');
-  msg.className = 'msg user';
-  msg.innerHTML = `<div class="bubble">${text.replace(/&/g,'&amp;').replace(/</g,'&lt;')}</div>`;
-  messages.appendChild(msg);
-  messages.scrollTop = messages.scrollHeight;
-}
-
-// ── Streaming simulation ─────────────────────────────────────────────────────
 function stream(myToken, bubble, text, onDone) {
   const tokens = text.split(/(\s+)/);
-  let acc = '';
-  let i   = 0;
+  let acc = '', i = 0;
   function tick() {
     if (token !== myToken) return;
     if (i >= tokens.length) {
       bubble.innerHTML = md(acc);
-      if (mode === 'math') renderMath(bubble);
+      if (window.renderMathInElement) try { renderMathInElement(bubble, KATEX_CFG); } catch(e){}
       messages.scrollTop = messages.scrollHeight;
       onDone && onDone();
       return;
     }
     const take = Math.min(Math.floor(Math.random() * 2) + 1, tokens.length - i);
     acc += tokens.slice(i, i + take).join('');
-    i   += take;
+    i += take;
     bubble.innerHTML = md(acc);
     messages.scrollTop = messages.scrollHeight;
     setTimeout(tick, 10 + Math.random() * 18);
@@ -575,56 +340,40 @@ function stream(myToken, bubble, text, onDone) {
   tick();
 }
 
-// ── Demo sequence ─────────────────────────────────────────────────────────────
+function copyLatex() {
+  try { navigator.clipboard.writeText(LATEX_SOURCE); } catch(e) {}
+  const prev = copyLatexBtn.textContent;
+  copyLatexBtn.textContent = '✓';
+  setTimeout(() => { copyLatexBtn.textContent = prev; }, 1200);
+}
+
 function runDemo() {
   const myToken = token;
-  updateBg();
-  loading.style.display = 'flex';
-  messages.style.display = 'none';
+  copyLatexBtn.style.display = 'none';
   busy(true);
-
-  setTimeout(() => {
+  loading.style.display = 'none';
+  messages.style.display = 'block';
+  const bubble = newAssistantBubble();
+  stream(myToken, bubble, CONTENT.first, () => {
     if (token !== myToken) return;
-    showChat();
-    const bubble = newAssistantBubble();
-
-    setTimeout(() => {
-      if (token !== myToken) return;
-      stream(myToken, bubble, CONTENT[mode].first, () => {
-        if (token !== myToken) return;
-        inputBar.classList.add('on');
-        busy(false);
-        chatInput.focus();
-      });
-    }, 0);
-  }, 0);
+    copyLatexBtn.style.display = '';
+    inputBar.classList.add('on');
+    busy(false);
+    chatInput.focus();
+  });
 }
 
-// ── Mode switching ───────────────────────────────────────────────────────────
-function setMode(m) {
-  if (m === mode) return;
-  mode = m;
-  document.getElementById('btn-code').classList.toggle('active', m === 'code');
-  document.getElementById('btn-math').classList.toggle('active', m === 'math');
-  restart();
-}
-
-// ── Follow-up ────────────────────────────────────────────────────────────────
 function send() {
   const text = chatInput.value.trim();
   if (!text) return;
   chatInput.value = '';
   chatInput.style.height = '';
-
   addUserBubble(text);
   busy(true);
   turns++;
-
   const myToken = token;
-  const bubble  = newAssistantBubble();
-  const c       = CONTENT[mode];
-  const reply   = turns >= 3 ? c.restart : c.replies[c.pick(text.toLowerCase())];
-
+  const bubble = newAssistantBubble();
+  const reply = turns >= 3 ? CONTENT.restart : CONTENT.replies[CONTENT.pick(text.toLowerCase())];
   setTimeout(() => {
     stream(myToken, bubble, reply, () => {
       if (token !== myToken) return;
@@ -633,7 +382,6 @@ function send() {
   }, 80);
 }
 
-// ── Restart ───────────────────────────────────────────────────────────────────
 function restart() {
   token++;
   turns = 0;
@@ -642,7 +390,6 @@ function restart() {
   runDemo();
 }
 
-// ── Events ───────────────────────────────────────────────────────────────────
 chatInput.addEventListener('input', () => {
   chatInput.style.height = '';
   chatInput.style.height = chatInput.scrollHeight + 'px';
@@ -652,7 +399,6 @@ chatInput.addEventListener('keydown', e => {
 });
 sendBtn.onclick = send;
 
-// ── Init ─────────────────────────────────────────────────────────────────────
 runDemo();
 </script>
 </body>
