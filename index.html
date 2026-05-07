@@ -114,7 +114,7 @@
     #input-bar{display:none;padding:10px 12px;border-top:1px solid rgba(255,255,255,.07);flex-shrink:0}
     #input-bar.on{display:block}
     #input-wrap{position:relative}
-    #chat-input{width:100%;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:20px;padding:10px 52px 10px 14px;color:rgba(230,230,245,.92);font-family:inherit;font-size:13.5px;line-height:1.45;resize:none;outline:none;min-height:40px;max-height:120px;overflow-y:auto;transition:border-color .15s;scrollbar-width:thin;display:block}
+    #chat-input{width:100%;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:20px;padding:10px 52px 10px 14px;color:rgba(230,230,245,.92);font-family:inherit;font-size:13.5px;line-height:1.45;resize:none;outline:none;min-height:40px;max-height:120px;overflow-y:hidden;transition:border-color .15s;scrollbar-width:thin;display:block}
     #chat-input:focus{border-color:rgba(100,160,255,.4)}
     #chat-input::placeholder{color:rgba(255,255,255,.25)}
     #send-btn{position:absolute;right:5px;top:50%;transform:translateY(-50%);width:34px;height:34px;border-radius:50%;border:1px solid rgba(140,185,255,.45);background:linear-gradient(160deg,rgb(65,130,255) 0%,rgb(42,96,224) 100%);box-shadow:inset 0 1px 0 rgba(200,225,255,.3),0 2px 10px rgba(50,100,240,.5);color:#fff;font-size:17px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .15s,border-color .15s,box-shadow .15s;line-height:1}
@@ -204,16 +204,23 @@ u(\cdot,0) &= u_0(\cdot) \tag{1.3}
 \end{align}`;
 
 const CONTENT = {
-  first: String.raw`## Summary: 3D Hyper-dissipative Navier-Stokes System
+  first: String.raw`### Analysis of the Hyper-dissipative Navier-Stokes System
 
-The provided text defines the mathematical framework for the 3D hyper-dissipative (HD) Navier-Stokes (NS) system. This is a generalization of the classical Navier-Stokes equations where the standard Laplacian operator $\Delta$ (representing physical viscosity) is replaced by a higher-order operator $(-\Delta)^\beta$.
+The provided text defines the 3D hyper-dissipative (HD) Navier-Stokes (NS) system. This is a generalization of the classical Navier-Stokes equations where the standard Laplacian operator $\Delta$ (representing physical viscosity) is replaced by a fractional power $(-\Delta)^\beta$.
 
-## Key Concepts
+### Key Concepts
 
-- **Hyper-viscosity:** The term $(-\Delta)^\beta$ with $\beta > 1$ represents hyper-dissipation. This operator acts as a Fourier multiplier with the symbol $|\xi|^{2\beta}$, meaning it suppresses high-frequency modes more aggressively than the standard Laplacian ($\beta=1$).
-- **Incompressibility:** Equation (1.2) enforces the divergence-free condition, $\text{div } u = 0$, which is a standard constraint for incompressible fluid flow.
-- **Domain and Initial Conditions:** The system is defined on the entire 3D space $\mathbb{R}^3$ over a time interval $(0, T)$, with an initial velocity field $u_0$ specified at $t=0$.
-- **Physical Simplifications:** The system assumes a unit hyperviscosity coefficient and no external forcing, focusing purely on the internal dynamics of the hyper-dissipative fluid.`,
+- **Hyper-dissipation:** By setting $\beta > 1$, the model introduces stronger damping at high frequencies (small scales) compared to the standard Navier-Stokes equations ($\beta = 1$).
+- **Fourier Multiplier:** The operator $(-\Delta)^\beta$ is defined in the frequency domain as multiplication by $|\xi|^{2\beta}$. This highlights that the dissipation is scale-dependent, where higher wave numbers $\xi$ are damped more aggressively as $\beta$ increases.
+- **Incompressibility:** Equation (1.2) enforces the divergence-free condition, which is a standard constraint for incompressible fluid flow.
+- **System Components:**
+- $\partial_t u$: The local acceleration of the fluid velocity.
+- $u \cdot \nabla u$: The nonlinear convective term representing advection.
+- $\nabla p$: The pressure gradient, which acts as a Lagrange multiplier to enforce the incompressibility constraint.
+
+### Summary
+
+The system describes the evolution of a velocity field $u$ in $\mathbb{R}^3$ over time $T$. The parameter $\beta$ allows researchers to study the regularity of solutions; specifically, for sufficiently large $\beta$, the hyper-dissipation is strong enough to potentially prevent the formation of singularities that remain an open problem in the standard 3D Navier-Stokes equations.`,
 
   pick: lower => {
     if (lower.includes('beta') || lower.includes('fourier') || lower.includes('frequen') || lower.includes('dissip') || lower.includes('hyper')) return 0;
@@ -435,6 +442,7 @@ function restart() {
 chatInput.addEventListener('input', () => {
   chatInput.style.height = '';
   chatInput.style.height = chatInput.scrollHeight + 'px';
+  chatInput.style.overflowY = chatInput.scrollHeight > 120 ? 'auto' : 'hidden';
 });
 chatInput.addEventListener('keydown', e => {
   if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); send(); }
